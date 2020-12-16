@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  AfterViewChecked,
   AfterViewInit,
   Component,
   ContentChildren,
@@ -11,6 +12,7 @@ import {
   ViewChild,
   ViewChildren
 } from "@angular/core";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { Page } from "../model/page.model";
 
 @Component({
@@ -18,7 +20,7 @@ import { Page } from "../model/page.model";
   templateUrl: "paginated-view.component.html",
   styleUrls: ["paginated-view.component.scss"]
 })
-export class PaginatedViewComponent implements AfterViewInit {
+export class PaginatedViewComponent implements AfterViewInit, AfterViewChecked {
   @Input() pageSize: "A3" | "A4" = "A4";
 
   @ViewChild("paginatedView") paginatedView: ElementRef<HTMLDivElement>;
@@ -35,43 +37,40 @@ export class PaginatedViewComponent implements AfterViewInit {
   @ViewChildren("pageFooter", { read: ElementRef })
   footerElements: QueryList<ElementRef>;
 
-  pages: Page[] = [];
+  pages$ = new BehaviorSubject<Page[]>([]);
 
   constructor() {}
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit(): void {}
+
+  ngAfterViewChecked(): void {
     this.updatePages();
 
     // when ever childs updated call the updatePagesfunction
     this.elements.changes.subscribe(el => {
-      this.updatePages();
+      //this.updatePages();
     });
+
+    this.pages$.subscribe(pages =>
+      pages.forEach((page, pIndex, arr) => {
+        page.headerElementTemplate = this.headerElements.find(
+          (el, i, arr) => pIndex === i
+        );
+        page.footerElementTemplate = this.footerElements.find(
+          (el, i, arr) => pIndex === i
+        );
+      })
+    );
   }
 
-  updatePages(): void {
-    this.pages = [];
+  updatePages() {
+    this.pages$.next([]);
     // clear paginated view
     this.paginatedView.nativeElement.innerHTML = "";
 
     // get a new page and add it to the paginated view
     let page: Page = new Page(this.pageSize, null, null);
-    this.pages.push(page);
-    page.headerElementTemplate = this.headerElements.find(
-      (item, index, array) => index === this.pages.indexOf(page)
-    );
-    page.footerElementTemplate = this.footerElements.find(
-      (item, index, array) => index === this.pages.indexOf(page)
-    );
-
-    console.log("headerList", this.headerElements);
-    console.log("index of page", this.pages.indexOf(page));
-    console.log(
-      "foundHeader",
-      this.headerElements.find(
-        (item, index, array) => index === this.pages.indexOf(page)
-      )
-    );
-    this.headerElements.forEach((h, i, a) => console.log("index", i));
+    this.pages$.next(this.pages$.value.concat(page));
 
     this.paginatedView.nativeElement.appendChild(page.divElement);
 
@@ -92,13 +91,7 @@ export class PaginatedViewComponent implements AfterViewInit {
       // then get a new page and append the child to the  new page
       if (page.divElement.scrollHeight > page.divElement.clientHeight) {
         page = new Page(this.pageSize, null, null);
-        this.pages.push(page);
-        page.headerElementTemplate = this.headerElements.find(
-          (item, index, array) => index === this.pages.indexOf(page)
-        );
-        page.footerElementTemplate = this.footerElements.find(
-          (item, index, array) => index === this.pages.indexOf(page)
-        );
+        this.pages$.next(this.pages$.value.concat(page));
         this.paginatedView.nativeElement.appendChild(page.divElement);
         page.addElements(el);
       }
@@ -107,6 +100,8 @@ export class PaginatedViewComponent implements AfterViewInit {
 
     //bring the element in to view port
     lastEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    return of();
   }
 
   getNewPage(): HTMLDivElement {
