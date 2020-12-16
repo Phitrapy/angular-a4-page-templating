@@ -1,7 +1,13 @@
 <!-- display: none style will any child that does not have #pageContent local variable defined -->
 <div class="content-wrapper" #contentWrapper style="display: none">
-	<ng-content></ng-content>
+  <ng-content></ng-content>
 </div>
-<div class="paginated-view" #paginatedView>
+<div class="paginated-view" #paginatedView></div>
 
-</div>
+<ng-container>
+  <div #pageHeader class="page-header">Header</div>
+</ng-container>
+
+<ng-container>
+  <div #pageFooter class="page-footer">Footer</div>
+</ng-container>

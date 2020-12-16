@@ -7,6 +7,7 @@ import {
   Input,
   OnInit,
   QueryList,
+  TemplateRef,
   ViewChild
 } from "@angular/core";
 import { Page } from "../model/page.model";
@@ -27,6 +28,12 @@ export class PaginatedViewComponent implements AfterViewInit {
     ElementRef
   >;
 
+  @ViewChild("pageHeader", { read: ElementRef })
+  headerElement: ElementRef;
+
+  @ViewChild("pageFooter", { read: ElementRef })
+  footerElement: ElementRef;
+
   constructor() {}
 
   ngAfterViewInit(): void {
@@ -43,9 +50,12 @@ export class PaginatedViewComponent implements AfterViewInit {
     this.paginatedView.nativeElement.innerHTML = "";
 
     // get a new page and add it to the paginated view
-    let page: Page = new Page(this.pageSize);this.paginatedView.nativeElement.appendChild(
-      page.divElement
+    let page: Page = new Page(
+      this.pageSize,
+      this.headerElement,
+      this.footerElement
     );
+    this.paginatedView.nativeElement.appendChild(page.divElement);
 
     let lastEl: HTMLElement;
     // add content childrens to the page one by one
@@ -63,7 +73,7 @@ export class PaginatedViewComponent implements AfterViewInit {
       // after adding the child if the page scroll hight becomes larger than the page height
       // then get a new page and append the child to the  new page
       if (page.divElement.scrollHeight > page.divElement.clientHeight) {
-        page = new Page(this.pageSize);
+        page = new Page(this.pageSize, this.headerElement, this.footerElement);
         this.paginatedView.nativeElement.appendChild(page.divElement);
         page.addElements(el);
       }
