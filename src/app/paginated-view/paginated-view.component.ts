@@ -34,6 +34,8 @@ export class PaginatedViewComponent implements AfterViewInit {
   @ViewChild("pageFooter", { read: ElementRef })
   footerElement: ElementRef;
 
+  pages: Page[] = [];
+
   constructor() {}
 
   ngAfterViewInit(): void {
@@ -55,6 +57,7 @@ export class PaginatedViewComponent implements AfterViewInit {
       this.headerElement,
       this.footerElement
     );
+
     this.paginatedView.nativeElement.appendChild(page.divElement);
 
     let lastEl: HTMLElement;
