@@ -1,0 +1,21 @@
+.block {
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  width: 100%;
+  background-color: rgb(80, 153, 218);
+  padding: 0 3em;
+}
+
+.footer {
+  width: 100%;
+  background-color: rgb(80, 153, 218);
+  padding: 0 3em;
+}

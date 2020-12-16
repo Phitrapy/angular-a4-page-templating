@@ -1,0 +1,48 @@
+/* Add application styles & imports to this file! */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+header {
+  margin: 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #fff;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+  p {
+    margin-top: 0;
+  }
+}
+
+.paginated-view {
+  > .page {
+    margin: 0 auto;
+    margin-bottom: 0.5cm;
+  }
+}
+.page {
+  display: block;
+  background: white;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.A4 {
+  width: 595px;
+  height: 842px;
+  padding: 10px 25px;
+}
+
+.A3{
+  width: 842px;
+  height: 1191px;
+  padding: 10px 25px;
+}
