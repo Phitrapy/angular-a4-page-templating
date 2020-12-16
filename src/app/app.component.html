@@ -1,47 +1,49 @@
 <header>
-  <h2>
-    Based on
-    <a href="https://stackblitz.com/edit/angular-a4-page">this example</a>
-  </h2>
-  <p><strong>Try adding elements to the page</strong></p>
-  <div>
-    <button (click)="onBtnAddElement('block')">Add block</button>
-    <button (click)="onBtnAddElement('text')">Add Text</button>
-    <button (click)="onBtnAddElement('form')">Add Form</button>
-    <button (click)="onBtnAddElement('table')">Add Table</button>
-    <button (click)="onReset()">Reset</button>
-  </div>
+	<h2>
+		Based on
+		<a href="https://stackblitz.com/edit/angular-a4-page">this example</a>
+	</h2>
+	<p><strong>Try adding elements to the page</strong></p>
+	<div>
+		<button (click)="onBtnAddElement('block')">Add block</button>
+		<button (click)="onBtnAddElement('text')">Add Text</button>
+    <button (click)="onBtnAddElement('line')">Add Line</button>
+		<button (click)="onBtnAddElement('form')">Add Form</button>
+		<button (click)="onBtnAddElement('table')">Add Table</button>
+		<button (click)="onReset()">Reset</button>
+	</div>
 </header>
 <br />
 <app-paginated-view [pageSize]="'A4'">
-  <!-- render data inside paginated view -->
-  <ng-container *ngFor="let element of elements" [ngSwitch]="element">
-    <div #pageContent *ngSwitchCase="'header'" class="header">Header</div>
-    <div #pageContent *ngSwitchCase="'footer'" class="footer">Footer</div>
+	<!-- render data inside paginated view -->
+	<ng-container *ngFor="let element of elements" [ngSwitch]="element">
+		<div #pageContent *ngSwitchCase="'header'" class="header">Header</div>
+		<div #pageContent *ngSwitchCase="'footer'" class="footer">Footer</div>
 
-    <div #pageContent class="block" *ngSwitchCase="'block'"></div>
+		<div #pageContent class="block" *ngSwitchCase="'block'"></div>
 
-    <form #pageContent *ngSwitchCase="'form'">
-      model
-      <div>User name: <input name="name" /></div>
-      <br />
-      <div>Password: <input type="password" name="password" /></div>
-      <br />
-      <div><input type="submit" value="submit" /></div>
-    </form>
-    <app-table #pageContent *ngSwitchCase="'table'"></app-table>
-    <p #pageContent *ngSwitchCase="'text'">
-      1Pellentesque habitant morbi tristique senectus et netus et malesuada
-      fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies
-      eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.
-      Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
-      amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum
-      sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget
-      tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim
-      ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
-      dapibus, neque id cursus faucibus, tortor neque egestas augue, eu
-      vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt
-      quis, accumsan porttitor, facilisis luctus, metus
-    </p>
-  </ng-container>
+		<form #pageContent *ngSwitchCase="'form'">
+			model
+			<div>User name: <input name="name" /></div>
+				<br />
+				<div>Password: <input type="password" name="password" /></div>
+					<br />
+					<div><input type="submit" value="submit" /></div>
+		</form>
+		<app-table #pageContent *ngSwitchCase="'table'"></app-table>
+		<p #pageContent *ngSwitchCase="'text'">
+			1Pellentesque habitant morbi tristique senectus et netus et malesuada
+			fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies
+			eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.
+			Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
+			amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum
+			sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget
+			tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim
+			ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
+			dapibus, neque id cursus faucibus, tortor neque egestas augue, eu
+			vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt
+			quis, accumsan porttitor, facilisis luctus, metus
+		</p>
+		<div #pageContent *ngSwitchCase="'line'">Pellentesque habitant morbi tristique senectus</div>
+	</ng-container>
 </app-paginated-view>

@@ -29,7 +29,6 @@ export class Page {
     this.divElement.classList.add(this.pageSize);
 
     this.elementsSub.subscribe(els => {
-      console.log("new Elements", els);
       if (els.length > 0) {
         if (this.headerElementTemplate) {
           this.headerElement = this.divElement.append(
@@ -38,7 +37,6 @@ export class Page {
         }
         els.forEach(el => this.divElement.append(el));
         if (this.footerElementTemplate) {
-          console.log("footerElementTemplate");
           this.footerElement = this.divElement.append(
             this.footerElementTemplate.nativeElement
           );

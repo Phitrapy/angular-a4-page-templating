@@ -8,7 +8,8 @@ import {
   OnInit,
   QueryList,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  ViewChildren
 } from "@angular/core";
 import { Page } from "../model/page.model";
 
@@ -28,11 +29,11 @@ export class PaginatedViewComponent implements AfterViewInit {
     ElementRef
   >;
 
-  @ViewChild("pageHeader", { read: ElementRef })
-  headerElement: ElementRef;
+  @ViewChildren("pageHeader", { read: ElementRef })
+  headerElements: QueryList<ElementRef>;
 
-  @ViewChild("pageFooter", { read: ElementRef })
-  footerElement: ElementRef;
+  @ViewChildren("pageFooter", { read: ElementRef })
+  footerElements: QueryList<ElementRef>;
 
   pages: Page[] = [];
 
@@ -48,15 +49,29 @@ export class PaginatedViewComponent implements AfterViewInit {
   }
 
   updatePages(): void {
+    this.pages = [];
     // clear paginated view
     this.paginatedView.nativeElement.innerHTML = "";
 
     // get a new page and add it to the paginated view
-    let page: Page = new Page(
-      this.pageSize,
-      this.headerElement,
-      this.footerElement
+    let page: Page = new Page(this.pageSize, null, null);
+    this.pages.push(page);
+    page.headerElementTemplate = this.headerElements.find(
+      (item, index, array) => index === this.pages.indexOf(page)
     );
+    page.footerElementTemplate = this.footerElements.find(
+      (item, index, array) => index === this.pages.indexOf(page)
+    );
+
+    console.log("headerList", this.headerElements);
+    console.log("index of page", this.pages.indexOf(page));
+    console.log(
+      "foundHeader",
+      this.headerElements.find(
+        (item, index, array) => index === this.pages.indexOf(page)
+      )
+    );
+    this.headerElements.forEach((h, i, a) => console.log("index", i));
 
     this.paginatedView.nativeElement.appendChild(page.divElement);
 
@@ -76,7 +91,14 @@ export class PaginatedViewComponent implements AfterViewInit {
       // after adding the child if the page scroll hight becomes larger than the page height
       // then get a new page and append the child to the  new page
       if (page.divElement.scrollHeight > page.divElement.clientHeight) {
-        page = new Page(this.pageSize, this.headerElement, this.footerElement);
+        page = new Page(this.pageSize, null, null);
+        this.pages.push(page);
+        page.headerElementTemplate = this.headerElements.find(
+          (item, index, array) => index === this.pages.indexOf(page)
+        );
+        page.footerElementTemplate = this.footerElements.find(
+          (item, index, array) => index === this.pages.indexOf(page)
+        );
         this.paginatedView.nativeElement.appendChild(page.divElement);
         page.addElements(el);
       }
