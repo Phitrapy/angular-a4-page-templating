@@ -2,9 +2,15 @@
 <div class="content-wrapper" #contentWrapper style="display: none">
 	<ng-content></ng-content>
 </div>
-<div class="paginated-view" #paginatedView></div>
+<div class="paginated-view" #paginatedView *ngFor="let page of pages$ | async">
+	<app-page [pageContent]="page" [headerTemplate]="headerTemplate" [footerTemplate]="footerTemplate"></app-page>
+</div>
 
-<ng-container *ngFor="let page of pages$ | async">
-	<div #pageHeader class="page-header">Header</div>
-	<div #pageFooter class="page-footer">Footer</div>
-</ng-container>
+<ng-template #headerTemplate>
+	<div class="header">Header</div>
+</ng-template>
+
+
+<ng-template #footerTemplate>
+	<div class="footer">Footer</div>
+</ng-template>

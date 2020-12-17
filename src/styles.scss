@@ -41,8 +41,20 @@ header {
   padding: 10px 25px;
 }
 
-.A3{
+.A3 {
   width: 842px;
   height: 1191px;
   padding: 10px 25px;
+}
+
+.page-header {
+  width: 100%;
+  background-color: rgb(80, 153, 218);
+  padding: 0 3em;
+}
+
+.page-footer {
+  width: 100%;
+  background-color: rgb(80, 153, 218);
+  padding: 0 3em;
 }

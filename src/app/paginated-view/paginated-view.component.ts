@@ -2,7 +2,7 @@ import {
   AfterContentInit,
   AfterViewChecked,
   AfterViewInit,
-ChangeDetectorRef,
+  ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
@@ -32,11 +32,11 @@ export class PaginatedViewComponent implements AfterViewInit, AfterViewChecked {
     ElementRef
   >;
 
-  @ViewChildren("pageHeader", { read: ElementRef })
-  headerElements: QueryList<ElementRef>;
+  @ViewChild("pageHeader", { read: ElementRef })
+  headerTemplate: TemplateRef<any>;
 
-  @ViewChildren("pageFooter", { read: ElementRef })
-  footerElements: QueryList<ElementRef>;
+  @ViewChild("pageFooter", { read: ElementRef })
+  footerTemplate: TemplateRef<any>;
 
   pages$ = new BehaviorSubject<Page[]>([]);
 
@@ -51,7 +51,7 @@ export class PaginatedViewComponent implements AfterViewInit, AfterViewChecked {
     this.elements.changes.subscribe(el => {
       this.updatePages();
     });
-    
+
     this.pages$.subscribe(pages =>
       pages.forEach((page, pIndex, arr) => {
         page.headerElementTemplate = this.headerElements.find(
@@ -66,20 +66,23 @@ export class PaginatedViewComponent implements AfterViewInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.changeDedectionRef.detectChanges()
+    this.changeDedectionRef.detectChanges();
   }
 
   updatePages() {
     this.pages$.next([]);
     // clear paginated view
     this.paginatedView.nativeElement.innerHTML = "";
-    //this.paginatedViewHtml$.next("");
 
     // get a new page and add it to the paginated view
-    let page: Page = new Page(this.pageSize, null, null);
+    let page: Page = new Page(
+      this.pageSize,
+      this.headerTemplate,
+      this.footerTemplate
+    );
     this.pages$.next(this.pages$.value.concat(page));
 
-    //this.paginatedView.nativeElement.appendChild(page.divElement);
+    this.paginatedView.nativeElement.appendChild(page.divElement);
 
     let lastEl: HTMLElement;
     // add content childrens to the page one by one

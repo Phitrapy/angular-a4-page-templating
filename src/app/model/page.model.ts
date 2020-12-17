@@ -4,9 +4,9 @@ import { BehaviorSubject } from "rxjs";
 export class Page {
   public pageSize: PageSize;
 
-  public headerElementTemplate: ElementRef;
+  public headerElementTemplate: TemplateRef<any>;
   public headerElement;
-  public footerElementTemplate: ElementRef;
+  public footerElementTemplate: TemplateRef<any>;
   public footerElement;
 
   private elementsSub: BehaviorSubject<HTMLElement[]>;
@@ -15,8 +15,8 @@ export class Page {
 
   constructor(
     pageSize: PageSize,
-    headerTemplate: ElementRef,
-    footerTemplate: ElementRef,
+    headerTemplate: TemplateRef<any>,
+    footerTemplate: TemplateRef<any>,
     elements?: HTMLElement[]
   ) {
     this.pageSize = pageSize;
@@ -28,11 +28,11 @@ export class Page {
     this.divElement.classList.add("page");
     this.divElement.classList.add(this.pageSize);
 
-    this.elementsSub.subscribe(els => {
+    /*this.elementsSub.subscribe(els => {
       if (els.length > 0) {
         if (this.headerElementTemplate) {
           this.headerElement = this.divElement.append(
-            this.headerElementTemplate.nativeElement
+            this.headerElementTemplate.
           );
         }
         els.forEach(el => this.divElement.append(el));
@@ -42,7 +42,7 @@ export class Page {
           );
         }
       }
-    });
+    });*/
   }
 
   addElements(...elements: HTMLElement[]) {
