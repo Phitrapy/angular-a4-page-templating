@@ -2,6 +2,7 @@ import {
   AfterContentInit,
   AfterViewChecked,
   AfterViewInit,
+ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
@@ -39,18 +40,18 @@ export class PaginatedViewComponent implements AfterViewInit, AfterViewChecked {
 
   pages$ = new BehaviorSubject<Page[]>([]);
 
-  constructor() {}
+  paginatedViewHtml$ = new BehaviorSubject<string>("");
 
-  ngAfterViewInit(): void {}
+  constructor(private changeDedectionRef: ChangeDetectorRef) {}
 
-  ngAfterViewChecked(): void {
+  ngAfterViewInit(): void {
     this.updatePages();
 
     // when ever childs updated call the updatePagesfunction
     this.elements.changes.subscribe(el => {
-      //this.updatePages();
+      this.updatePages();
     });
-
+    
     this.pages$.subscribe(pages =>
       pages.forEach((page, pIndex, arr) => {
         page.headerElementTemplate = this.headerElements.find(
@@ -59,20 +60,26 @@ export class PaginatedViewComponent implements AfterViewInit, AfterViewChecked {
         page.footerElementTemplate = this.footerElements.find(
           (el, i, arr) => pIndex === i
         );
+        this.paginatedView.nativeElement.appendChild(page.divElement);
       })
     );
+  }
+
+  ngAfterViewChecked(): void {
+    this.changeDedectionRef.detectChanges()
   }
 
   updatePages() {
     this.pages$.next([]);
     // clear paginated view
     this.paginatedView.nativeElement.innerHTML = "";
+    //this.paginatedViewHtml$.next("");
 
     // get a new page and add it to the paginated view
     let page: Page = new Page(this.pageSize, null, null);
     this.pages$.next(this.pages$.value.concat(page));
 
-    this.paginatedView.nativeElement.appendChild(page.divElement);
+    //this.paginatedView.nativeElement.appendChild(page.divElement);
 
     let lastEl: HTMLElement;
     // add content childrens to the page one by one
@@ -100,8 +107,6 @@ export class PaginatedViewComponent implements AfterViewInit, AfterViewChecked {
 
     //bring the element in to view port
     lastEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-    return of();
   }
 
   getNewPage(): HTMLDivElement {
